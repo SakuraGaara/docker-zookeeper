@@ -11,12 +11,13 @@ ADD ./src /
 
 RUN chmod +x /usr/local/sbin/start.sh
 
-RUN apk add --no-cache wget bash
+RUN apk add --no-cache wget bash tzdata
 
 RUN mkdir /opt \
   && wget -q -O - ${ZOOKEEPER_MIRROR}/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/zookeeper-${ZOOKEEPER_VERSION}.tar.gz | tar -xzf - -C /opt \
   && mv /opt/zookeeper-* /opt/zookeeper \
-  && chown -R root:root /opt/zookeeper
+  && chown -R root:root /opt/zookeeper \
+  && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 RUN addgroup -S zookeeper \
   && adduser -h /var/lib/zookeeper -G zookeeper -S -H -s /sbin/nologin zookeeper \
